@@ -11,8 +11,13 @@ class PreProcessing():
 
     """Read the stopwords file"""
     with open('stopwords.txt') as f:
-        global lines
-        lines = f.read().splitlines()
+        global stopwords
+        stopwords = f.read().splitlines()
+
+    """Read the stopwords file"""
+    with open('stopwords.txt') as f:
+        global delimiters
+        delimiters = f.read().splitlines()
 
     def tokenize_data(self, list):
         self.list = list
@@ -35,7 +40,7 @@ class PreProcessing():
         for i in self.list:
             for key, values in i.items():
                 for word in values:
-                    if (word in lines) or (len(word) == 1):
+                    if (word in stopwords) or (len(word) == 1):
                         values.remove(word)
         return self.list
 
@@ -45,5 +50,14 @@ class PreProcessing():
             for key, values in i.items():
                 for word in values:
                     if word == ',':
+                        values.remove(word)
+        return self.list
+
+    def remove_delimiters(self, list):
+        self.list = list
+        for i in self.list:
+            for key, values in i.items():
+                for word in values:
+                    if any(x in word for x in delimiters):
                         values.remove(word)
         return self.list
